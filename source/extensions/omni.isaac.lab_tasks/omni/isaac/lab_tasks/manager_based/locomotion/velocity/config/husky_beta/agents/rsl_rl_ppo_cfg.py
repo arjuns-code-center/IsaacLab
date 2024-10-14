@@ -13,11 +13,11 @@ from omni.isaac.lab_tasks.utils.wrappers.rsl_rl import (
 
 
 @configclass
-class SpotFlatPPORunnerCfg(RslRlOnPolicyRunnerCfg):
+class HuskyBetaFlatPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 24
     max_iterations = 20000
     save_interval = 50
-    experiment_name = "spot_flat"
+    experiment_name = "husky_beta_flat"
     empirical_normalization = False
     store_code_state = False
     policy = RslRlPpoActorCriticCfg(
