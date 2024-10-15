@@ -14,7 +14,7 @@ from omni.isaac.lab.utils.assets import ISAAC_NUCLEUS_DIR
 
 HUSKY_B_CFG = ArticulationCfg(
     spawn=sim_utils.UsdFileCfg(
-        usd_path=f"{ISAAC_NUCLEUS_DIR}/Robots/SiliconSynapse/huskybeta/huskybeta.usd",
+        usd_path=f"/home/siliconsynapse/Desktop/SiliconSynapse_Research/husky_beta/models/huskyb/huskyb.usd",
         activate_contact_sensors=True,
         rigid_props=sim_utils.RigidBodyPropertiesCfg(
             disable_gravity=False,
@@ -59,6 +59,14 @@ HUSKY_B_CFG = ArticulationCfg(
         ),
         "husky_knee": DelayedPDActuatorCfg(
             joint_names_expr=[".*_k_joint"],
+            effort_limit=45.0,
+            stiffness=60.0,
+            damping=1.5,
+            min_delay=0,  # physics time steps (min: 2.0*0=0.0ms)
+            max_delay=4,  # physics time steps (max: 2.0*4=8.0ms)
+        ),
+        "husky_ankle": DelayedPDActuatorCfg(
+            joint_names_expr=[".*_a_joint"],
             effort_limit=45.0,
             stiffness=60.0,
             damping=1.5,

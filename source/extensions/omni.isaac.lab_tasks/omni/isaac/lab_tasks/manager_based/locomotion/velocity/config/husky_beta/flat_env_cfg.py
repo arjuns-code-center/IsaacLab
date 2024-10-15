@@ -127,7 +127,7 @@ class HuskyBetaEventCfg:
         func=mdp.randomize_rigid_body_mass,
         mode="startup",
         params={
-            "asset_cfg": SceneEntityCfg("robot", body_names="body"),
+            "asset_cfg": SceneEntityCfg("robot", body_names="Body"),
             "mass_distribution_params": (-2.5, 2.5),
             "operation": "add",
         },
@@ -138,7 +138,7 @@ class HuskyBetaEventCfg:
         func=mdp.apply_external_force_torque,
         mode="reset",
         params={
-            "asset_cfg": SceneEntityCfg("robot", body_names="body"),
+            "asset_cfg": SceneEntityCfg("robot", body_names="Body"),
             "force_range": (0.0, 0.0),
             "torque_range": (-0.0, 0.0),
         },
@@ -193,7 +193,7 @@ class HuskyBetaRewardsCfg:
             "mode_time": 0.3,
             "velocity_threshold": 0.5,
             "asset_cfg": SceneEntityCfg("robot"),
-            "sensor_cfg": SceneEntityCfg("contact_forces", body_names=".*_foot"),
+            "sensor_cfg": SceneEntityCfg("contact_forces", body_names="Foot_.*"),
         },
     )
     base_angular_velocity = RewardTermCfg(
@@ -213,7 +213,7 @@ class HuskyBetaRewardsCfg:
             "std": 0.05,
             "tanh_mult": 2.0,
             "target_height": 0.1,
-            "asset_cfg": SceneEntityCfg("robot", body_names=".*_foot"),
+            "asset_cfg": SceneEntityCfg("robot", body_names="Foot_.*"),
         },
     )
     gait = RewardTermCfg(
@@ -223,7 +223,7 @@ class HuskyBetaRewardsCfg:
             "std": 0.1,
             "max_err": 0.2,
             "velocity_threshold": 0.5,
-            "synced_feet_pair_names": (("fl_foot", "hr_foot"), ("fr_foot", "hl_foot")),
+            "synced_feet_pair_names": (("Foot_fl", "Foot_br"), ("Foot_fr", "Foot_bl")),
             "asset_cfg": SceneEntityCfg("robot"),
             "sensor_cfg": SceneEntityCfg("contact_forces"),
         },
@@ -234,7 +234,7 @@ class HuskyBetaRewardsCfg:
     air_time_variance = RewardTermCfg(
         func=husky_beta_mdp.air_time_variance_penalty,
         weight=-1.0,
-        params={"sensor_cfg": SceneEntityCfg("contact_forces", body_names=".*_foot")},
+        params={"sensor_cfg": SceneEntityCfg("contact_forces", body_names="Foot_.*")},
     )
     base_motion = RewardTermCfg(
         func=husky_beta_mdp.base_motion_penalty, weight=-2.0, params={"asset_cfg": SceneEntityCfg("robot")}
@@ -246,15 +246,15 @@ class HuskyBetaRewardsCfg:
         func=husky_beta_mdp.foot_slip_penalty,
         weight=-0.5,
         params={
-            "asset_cfg": SceneEntityCfg("robot", body_names=".*_foot"),
-            "sensor_cfg": SceneEntityCfg("contact_forces", body_names=".*_foot"),
+            "asset_cfg": SceneEntityCfg("robot", body_names="Foot_.*"),
+            "sensor_cfg": SceneEntityCfg("contact_forces", body_names="Foot_.*"),
             "threshold": 1.0,
         },
     )
     joint_acc = RewardTermCfg(
         func=husky_beta_mdp.joint_acceleration_penalty,
         weight=-1.0e-4,
-        params={"asset_cfg": SceneEntityCfg("robot", joint_names=".*_h[xy]")},
+        params={"asset_cfg": SceneEntityCfg("robot", joint_names=".*_h[fs]_joint")},
     )
     joint_pos = RewardTermCfg(
         func=husky_beta_mdp.joint_position_penalty,
@@ -273,7 +273,7 @@ class HuskyBetaRewardsCfg:
     joint_vel = RewardTermCfg(
         func=husky_beta_mdp.joint_velocity_penalty,
         weight=-1.0e-2,
-        params={"asset_cfg": SceneEntityCfg("robot", joint_names=".*_h[xy]")},
+        params={"asset_cfg": SceneEntityCfg("robot", joint_names=".*_h[fs]_joint")},
     )
 
 
@@ -284,7 +284,7 @@ class HuskyBetaTerminationsCfg:
     time_out = DoneTerm(func=mdp.time_out, time_out=True)
     body_contact = DoneTerm(
         func=mdp.illegal_contact,
-        params={"sensor_cfg": SceneEntityCfg("contact_forces", body_names=["body", ".*leg"]), "threshold": 1.0},
+        params={"sensor_cfg": SceneEntityCfg("contact_forces", body_names=["Body", "Upper_leg_[fb][lr]", "Lower_leg_[fb][lr]"]), "threshold": 1.0},
     )
     terrain_out_of_bounds = DoneTerm(
         func=mdp.terrain_out_of_bounds,
