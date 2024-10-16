@@ -32,9 +32,9 @@ HUSKY_B_CFG = ArticulationCfg(
     init_state=ArticulationCfg.InitialStateCfg(
         pos=(0.0, 0.0, 0.5),
         joint_pos={
-            "[fb]l_hf_joint": 0.0,  # all frontal left hip joints
-            "[fb]r_hf_joint": 0.0,  # all frontal right hip joints
-            ".*_hs_joint": -0.785398,  # all sagittal hip joints
+            ".*_hf_joint": 0.0,  # all frontal hip joints
+            "[fb]l_hs_joint": -0.785398,  # all sagittal hip joints
+            "[fb]r_hs_joint": 0.785398,  # all sagittal hip joints"
             ".*_k_joint": 0.0,  # all knee joints
             ".*_a_joint": 0.0,  # all ankle joints
         },
