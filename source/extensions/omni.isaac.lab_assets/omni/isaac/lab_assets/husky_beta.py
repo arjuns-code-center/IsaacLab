@@ -4,9 +4,8 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 import omni.isaac.lab.sim as sim_utils
-from omni.isaac.lab.actuators import DelayedPDActuatorCfg, RemotizedPDActuatorCfg
+import omni.isaac.lab.actuators as acts
 from omni.isaac.lab.assets.articulation import ArticulationCfg
-from omni.isaac.lab.utils.assets import ISAAC_NUCLEUS_DIR
 
 ##
 # Configuration
@@ -41,37 +40,14 @@ HUSKY_B_CFG = ArticulationCfg(
         joint_vel={".*": 0.0},
     ),
     actuators={
-        "husky_hip_frontal": DelayedPDActuatorCfg(
-            joint_names_expr=[".*_hf_joint"],
+        "legs": acts.DelayedPDActuatorCfg(
+            joint_names_expr=[".*_joint"],
             effort_limit=45.0,
-            stiffness=30.0,
-            damping=0.75,
-            min_delay=0,  # physics time steps (min: 2.0*0=0.0ms)
-            max_delay=4,  # physics time steps (max: 2.0*4=8.0ms)
-        ),
-        "husky_hip_sagittal": DelayedPDActuatorCfg(
-            joint_names_expr=[".*_hs_joint"],
-            effort_limit=45.0,
-            stiffness=30.0,
-            damping=0.75,
-            min_delay=0,  # physics time steps (min: 2.0*0=0.0ms)
-            max_delay=4,  # physics time steps (max: 2.0*4=8.0ms)
-        ),
-        "husky_knee": DelayedPDActuatorCfg(
-            joint_names_expr=[".*_k_joint"],
-            effort_limit=45.0,
-            stiffness=30.0,
-            damping=0.75,
-            min_delay=0,  # physics time steps (min: 2.0*0=0.0ms)
-            max_delay=4,  # physics time steps (max: 2.0*4=8.0ms)
-        ),
-        "husky_ankle": DelayedPDActuatorCfg(
-            joint_names_expr=[".*_a_joint"],
-            effort_limit=45.0,
-            stiffness=30.0,
-            damping=0.75,
-            min_delay=0,  # physics time steps (min: 2.0*0=0.0ms)
-            max_delay=4,  # physics time steps (max: 2.0*4=8.0ms)
+            stiffness=60.0,
+            damping=1.5,
+            velocity_limit=10.0,
+            min_delay=0,
+            max_delay=4
         ),
     },
 )

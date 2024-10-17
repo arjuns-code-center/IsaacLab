@@ -27,20 +27,24 @@ from omni.isaac.lab_assets.husky_beta import HUSKY_B_CFG  # isort: skip
 
 
 COBBLESTONE_ROAD_CFG = terrain_gen.TerrainGeneratorCfg(
-    size=(8.0, 8.0),
+    size=(5.0, 5.0),
     border_width=20.0,
-    num_rows=9,
-    num_cols=21,
+    num_rows=16,
+    num_cols=16,
     horizontal_scale=0.1,
     vertical_scale=0.005,
     slope_threshold=0.75,
     difficulty_range=(0.0, 1.0),
     use_cache=False,
+    curriculum=True,
     sub_terrains={
         "flat": terrain_gen.MeshPlaneTerrainCfg(proportion=0.2),
         "random_rough": terrain_gen.HfRandomUniformTerrainCfg(
             proportion=0.2, noise_range=(0.02, 0.05), noise_step=0.02, border_width=0.25
         ),
+        # "pyramid_stairs": terrain_gen.MeshPyramidStairsTerrainCfg(proportion=0.2, step_height_range=(0.1, 0.3), step_width=0.15, platform_width=2.0),
+        # "inv_pyramid_stairs": terrain_gen.MeshInvertedPyramidStairsTerrainCfg(proportion=0.2, step_height_range=(0.1, 0.3), step_width=0.15, platform_width=2.0),
+        # "wave": terrain_gen.HfWaveTerrainCfg(proportion=0.2, amplitude_range=(1.0, 5.0))
     },
 )
 
@@ -128,7 +132,7 @@ class HuskyBetaEventCfg:
         mode="startup",
         params={
             "asset_cfg": SceneEntityCfg("robot", body_names="Body"),
-            "mass_distribution_params": (-2.5, 2.5),
+            "mass_distribution_params": (-0.1, 0.1),
             "operation": "add",
         },
     )
@@ -301,7 +305,7 @@ class HuskyBetaCurriculumCfg:
 
 
 @configclass
-class HuskyBetaFlatEnvCfg(LocomotionVelocityRoughEnvCfg):
+class HuskyBetaRLEnvCfg(LocomotionVelocityRoughEnvCfg):
 
     # Basic settings'
     observations: HuskyBetaObservationsCfg = HuskyBetaObservationsCfg()
@@ -314,8 +318,12 @@ class HuskyBetaFlatEnvCfg(LocomotionVelocityRoughEnvCfg):
     events: HuskyBetaEventCfg = HuskyBetaEventCfg()
     curriculum: HuskyBetaCurriculumCfg = HuskyBetaCurriculumCfg()
 
-    # Viewer
-    viewer = ViewerCfg(eye=(10.5, 10.5, 0.3), origin_type="world", env_index=0, asset_name="robot")
+    # Viewers
+    viewer = ViewerCfg(eye=(10.5, 10.5, 0.5), origin_type="world", env_index=0, asset_name="robot")
+    # viewerpyramid = ViewerCfg(eye=(7.8, 2.5, 11.2), origin_type="env", env_index=40, asset_name="robot")
+    # viewercoarse = ViewerCfg(eye=(6.0, -2.0, 2.0), origin_type="env", env_index=24, asset_name="robot")
+    # viewerinvpyramid = ViewerCfg(eye=(2.0, -5.2, 14), origin_type="env", env_index=44, asset_name="robot")
+    # viewerflat = ViewerCfg(eye=(4.5, -4.0, 1.4), origin_type="env", env_index=1, asset_name="robot")
 
     def __post_init__(self):
         # post init of parent
@@ -364,7 +372,7 @@ class HuskyBetaFlatEnvCfg(LocomotionVelocityRoughEnvCfg):
         self.scene.height_scanner = None
 
 
-class HuskyBetaFlatEnvCfg_PLAY(HuskyBetaFlatEnvCfg):
+class HuskyBetaRLEnvCfg_PLAY(HuskyBetaRLEnvCfg):
     def __post_init__(self) -> None:
         # post init of parent
         super().__post_init__()

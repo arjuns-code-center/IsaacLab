@@ -128,7 +128,7 @@ class SpotEventCfg:
         mode="startup",
         params={
             "asset_cfg": SceneEntityCfg("robot", body_names="body"),
-            "mass_distribution_params": (-2.5, 2.5),
+            "mass_distribution_params": (-0.1, 0.1),
             "operation": "add",
         },
     )
